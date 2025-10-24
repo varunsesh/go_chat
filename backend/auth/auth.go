@@ -92,25 +92,3 @@ type LoginResponse struct {
 	Message string `json:"message"`
 	Token   string `json:"token,omitempty"`
 }
-
-func DebugHandler(w http.ResponseWriter, r *http.Request) {
-	fmt.Printf("Debug endpoint reached with method: %s\n", r.Method)
-
-	if r.Method == http.MethodPost {
-		bodyBytes, err := ioutil.ReadAll(r.Body)
-		if err != nil {
-			fmt.Printf("Error reading body: %v\n", err)
-			http.Error(w, "Error reading body", http.StatusBadRequest)
-			return
-		}
-		defer r.Body.Close()
-
-		fmt.Printf("Body received: '%s'\n", string(bodyBytes))
-		fmt.Printf("Content-Length: %d\n", r.ContentLength)
-		fmt.Printf("Content-Type: %s\n", r.Header.Get("Content-Type"))
-
-		fmt.Fprintf(w, "Received %d bytes: %s", len(bodyBytes), string(bodyBytes))
-	} else {
-		fmt.Fprintf(w, "Method: %s", r.Method)
-	}
-}
